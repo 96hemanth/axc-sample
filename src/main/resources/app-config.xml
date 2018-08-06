@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cassandra="http://www.springframework.org/schema/data/cassandra"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                         http://www.springframework.org/schema/data/cassandra http://www.springframework.org/schema/data/cassandra/spring-cassandra-1.5.xsd ">
+
+
+    <!--<mongo:db-factory dbname="cqrs-replay" />-->
+    <!--<mongo:mongo-client port="27017" host="localhost" />-->
+
+    <!--<bean id="serializer" class="org.axonframework.serialization.json.JacksonSerializer"/>-->
+    <!--<bean id="upcasterChain" class="org.axonframework.serialization.upcasting.event.SingleEventUpcaster"/>-->
+
+    <bean id="eventStore" class="org.axonframework.cassandra.eventsourcing.eventstore.CassandraEventStorageEngine">
+        <!--<constructor-arg ref="serializer" />-->
+        <!--<constructor-arg ref="upcasterChain" />-->
+        <constructor-arg ref="session" />
+        <constructor-arg ref="schema"/>
+    </bean>
+
+    <cassandra:cluster id="cassandraCluster" contact-points="127.0.0.1" port="9042" />
+    <!--<cassandra:converter />-->
+    <cassandra:session id="session" cluster-ref="cassandraCluster" keyspace-name="example" />
+    <bean id="schema" class="org.axonframework.cassandra.eventsourcing.eventstore.EventSchema"/>
+    <!--<cassandra:template id="cqlTemplate" />-->
+
+    <!--<bean id="mongoTemplate" class="org.axonframework.mongo.DefaultMongoTemplate">-->
+       <!--<constructor-arg index="0" ref="mongoClient"/>-->
+        <!--<constructor-arg index="1" value="abcd"/>-->
+        <!--&lt;!&ndash;<constructor-arg index="2" value="events"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<constructor-arg index="3" value="snapshots"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<constructor-arg index="4">&ndash;&gt;-->
+            <!--&lt;!&ndash;<null/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</constructor-arg>&ndash;&gt;-->
+    <!--</bean>-->
+
+
+</beans>
